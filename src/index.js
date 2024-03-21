@@ -8,16 +8,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from "./context/UserContext";
 import store from "./redux/store";
-import { Provider } from 'react-redux';
+import { Provider } from "react-redux";
+import ErrorBoundary from "./components/Error/Error";
 ReactDOM.render(
   <Provider store={store}>
-  <React.StrictMode>
-    <UserProvider>
+    <React.StrictMode>
       <BrowserRouter>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </BrowserRouter>
-    </UserProvider>
-  </React.StrictMode>
+    </React.StrictMode>
   </Provider>,
   document.getElementById("root")
 );

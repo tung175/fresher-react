@@ -7,23 +7,33 @@ import { useLocation, NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { handleLogoutRedux } from "../redux/actions/userAction";
 const Header = () => {
-  const { logout, user } = useContext(UserContext);
-  const [hideHeader, setHideHeader] = useState(false);
-
+  // const { logout, user } = useContext(UserContext);
+  // const [hideHeader, setHideHeader] = useState(false);
+  const user = useSelector(state => state.user.userAcc)
+  const dispatch = useDispatch()
   // useEffect(() => {
   //   if (window.location.pathname === "/login") {
   //     setHideHeader(true);
   //   }
   // }, []);
-  const location = useLocation();
+  // const location = useLocation();
   const navigate = useNavigate();
   const handleLogout = () => {
-    logout();
-    // localStorage.removeItem("token")
-    navigate("/");
-    toast.success("Logout success");
+    // logout();
+    // // localStorage.removeItem("token")
+    // navigate("/");
+    // toast.success("Logout success");
+    dispatch(handleLogoutRedux())
   };
+  useEffect(() => {
+    if (user && user.auth === false && window.location.pathname !== "/login") {
+      navigate("/")
+      toast.success("logout success")
+    }
+  }, [user])
   return (
     <>
       <Navbar expand="lg" className="bg-body-tertiary">

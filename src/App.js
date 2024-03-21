@@ -12,20 +12,22 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
 import { UserContext } from "./context/UserContext";
 import AppRoutes from "./routes/AppRoutes";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { handleRefresh } from "./redux/actions/userAction";
 
 function App() {
 
-  const dataUserRedux = useSelector(state => state.user.user)
+  const dataUserRedux = useSelector(state => state.user.userAcc)
   console.log(dataUserRedux);
-  const { user, loginContext } = useContext(UserContext);
-
+  // const { user, loginContext } = useContext(UserContext);
+  const dispatch = useDispatch()
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      loginContext(
-        localStorage.getItem("email"),
-        localStorage.getItem("token")
-      );
+      dispatch(handleRefresh())
+      // loginContext(
+      //   localStorage.getItem("email"),
+      //   localStorage.getItem("token")
+      // );
     }
   }, []);
   return (

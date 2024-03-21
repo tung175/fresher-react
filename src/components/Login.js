@@ -3,37 +3,44 @@ import { toast } from "react-toastify";
 import { postLogin } from "../services/UserService";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { handleLoginRedux } from "../redux/actions/userAction";
 
 const Login = () => {
-  const {loginContext} = useContext(UserContext)
+  // const {loginContext} = useContext(UserContext)
+  const dispatch = useDispatch()
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [loadingApi, setLoadingApi] = useState(false);
+
+  const isLoading = useSelector(state => state.user.isLoading)
+  const userAcc = useSelector(state => state.user.userAcc)
   const navigate = useNavigate()
-  useEffect(() => {
-    let token = localStorage.getItem("token")
-    if (token) {
-      navigate("/")
-    }
-  },[])
+  // useEffect(() => {
+  //   let token = localStorage.getItem("token")
+  //   if (token) {
+  //     navigate("/")
+  //   }
+  // },[])
   const handleLogin = async () => {
     if (!email || !password) {
       toast.error("Email or Password not empty");
       return;
     }
-    setLoadingApi(true);
-    let res = await postLogin(email.trim(), password);
-    if (res && res.token) {
-      loginContext(email, res.token)
-      navigate("/")
-    } else {
-      if (res && res.status === 400) {
-        toast.error(res.data.error);
-      }
-    }
-    setLoadingApi(false);
+    // setLoadingApi(true);
+    dispatch(handleLoginRedux(email, password))
+    // let res = await postLogin(email.trim(), password);
+    // if (res && res.token) {
+    //   loginContext(email, res.token)
+    //   navigate("/")
+    // } else {
+    //   if (res && res.status === 400) {
+    //     toast.error(res.data.error);
+    //   }
+    // }
+    // setLoadingApi(false);
   };
 
   const handleGoBack = () => {
@@ -45,6 +52,12 @@ const Login = () => {
       handleLogin()
     }
   }
+
+  useEffect(() => {
+    if (userAcc && userAcc.auth === true) {
+      navigate("/")
+    }
+  }, [userAcc])
   return (
     <>
       <div className="login-container col-12 col-sm-4">
@@ -79,7 +92,7 @@ const Login = () => {
           disabled={email && password ? false : true}
           onClick={() => handleLogin()}
         >
-          {loadingApi && <i className="fa-solid fa-sync fa-spin" ></i>}
+          {isLoading && <i className="fa-solid fa-sync fa-spin" ></i>}
           &nbsp;
           Login
         </button>
