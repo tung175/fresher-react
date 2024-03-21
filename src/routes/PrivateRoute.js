@@ -5,7 +5,7 @@ import { UserContext } from "../context/UserContext";
 import { Alert } from "react-bootstrap";
 
 const PrivateRoute = (props) => {
-    console.log(props);
+    // console.log(props);
   const { user } = useContext(UserContext);
   if (user && !user.auth) {
     return (

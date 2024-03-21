@@ -9,7 +9,7 @@
 }
 
 .add-new-user{
-    display: flex;
+    // display: flex;
     justify-content: space-between;
     align-items: center;
 
@@ -21,4 +21,13 @@
     i {
         padding: 0 2px;
     }
+  }
+
+  .customize-table {
+    width: inherit;
+    overflow-x: auto;
+  }
+
+  .pagination {
+    justify-content: center;
   }
